@@ -81,11 +81,15 @@ export function TranscriptImages({
   images,
   indent = 2,
   onPreview,
+  suppressGraphics = false,
 }: {
   readonly images: readonly TranscriptImage[]
   readonly indent?: number
   /** Present = thumbnails are clickable and open the shared preview overlay. */
   readonly onPreview?: (image: TranscriptImage) => void
+  /** Keep fallback geometry/click targets but yield the global terminal-image
+   * frame budget to the modal full preview. */
+  readonly suppressGraphics?: boolean
 }): React.ReactNode {
   const { columns } = useTerminalSize()
   if (images.length === 0) return null
@@ -107,6 +111,7 @@ export function TranscriptImages({
             width={width}
             height={height}
             onPreview={onPreview}
+            suppressGraphics={suppressGraphics}
           />
         )
       })}
@@ -119,11 +124,13 @@ function TranscriptImagePreview({
   width,
   height,
   onPreview,
+  suppressGraphics,
 }: {
   readonly image: TranscriptImage
   readonly width: number
   readonly height: number
   readonly onPreview?: (image: TranscriptImage) => void
+  readonly suppressGraphics: boolean
 }): React.ReactNode {
   const [state, setState] = React.useState<
     | { readonly kind: 'loading' }
@@ -132,6 +139,7 @@ function TranscriptImagePreview({
   >({ kind: 'loading' })
 
   React.useEffect(() => {
+    if (suppressGraphics) return
     let live = true
     setState({ kind: 'loading' })
     void thumbnailTier.load(image).then(
@@ -139,7 +147,7 @@ function TranscriptImagePreview({
       () => { if (live) setState({ kind: 'failed' }) },
     )
     return () => { live = false }
-  }, [image])
+  }, [image, suppressGraphics])
 
   const label = transcriptImageLabel(image)
   const fallback = state.kind === 'failed'
@@ -149,7 +157,7 @@ function TranscriptImagePreview({
       : t('transcript-image-ready', { name: label })
   const preview = (
     <Image
-      source={state.kind === 'ready' ? state.source : undefined}
+      source={!suppressGraphics && state.kind === 'ready' ? state.source : undefined}
       width={width}
       height={height}
       alt={label}
