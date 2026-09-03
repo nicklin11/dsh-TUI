@@ -55,7 +55,9 @@ the interface, and removing it leaves no core modifications behind.
   it and leaving the prompt visible (Esc or click outside closes); its title reads `Image #N — format · size · bytes ·
   file name` and images staged in this session show their source path on the
   card's bottom row. Finder-copied
-  image files paste straight into the attachment store as `[Image #N]`.
+  image files paste straight into the attachment store as `[Image #N]`; in the
+  composer a staged `[Image #N]` is one unit — the caret steps over it, deletes
+  remove it whole, and it inverts whole while the caret sits on it.
 - **Timeline navigation**: a Grok-style turn rail covering **every turn
   (folded ones included)** — even when the fold window only exposes the last
   few turns, the full history stays one click away (clicking a folded tick
