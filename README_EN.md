@@ -57,7 +57,8 @@ the interface, and removing it leaves no core modifications behind.
   card's bottom row. Finder-copied
   image files paste straight into the attachment store as `[Image #N]`; in the
   composer a staged `[Image #N]` is one unit — the caret steps over it, deletes
-  remove it whole, and it inverts whole while the caret sits on it.
+  remove it whole, and while the caret sits on it the token inverts and its
+  preview opens, closing again when the caret leaves.
 - **Timeline navigation**: a Grok-style turn rail covering **every turn
   (folded ones included)** — even when the fold window only exposes the last
   few turns, the full history stays one click away (clicking a folded tick
